@@ -6,17 +6,21 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.technicaltest.messageworker.event.OrderEvent;
+import com.technicaltest.messageworker.service.OrderService;
 
 import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class OrderConsumer {
 
+    private OrderService orderService;
+
     private ObjectMapper objectMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderConsumer.class);
 
-    public OrderConsumer(ObjectMapper objectMapper) {
+    public OrderConsumer(OrderService orderService, ObjectMapper objectMapper) {
+        this.orderService = orderService;
         this.objectMapper = objectMapper;
     }
 
@@ -24,5 +28,6 @@ public class OrderConsumer {
     public void processOrder(String event) {
         logger.info("Received event {}", event);
         OrderEvent orderEvent = objectMapper.readValue(event, OrderEvent.class);
+        orderService.process(orderEvent);
     }
 }
