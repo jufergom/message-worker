@@ -28,6 +28,9 @@ public class OrderConsumer {
     public void processOrder(String event) {
         logger.info("Received event {}", event);
         OrderEvent orderEvent = objectMapper.readValue(event, OrderEvent.class);
-        orderService.process(orderEvent);
+        orderService.process(orderEvent)
+            .doOnSuccess(order -> logger.info("Order saved: {}", order.getOrderId()))
+            .doOnError(error -> logger.error("Failed to process order", error))
+            .subscribe();
     }
 }

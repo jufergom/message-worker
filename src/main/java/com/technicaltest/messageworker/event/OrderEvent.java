@@ -5,9 +5,9 @@ import java.util.List;
 public class OrderEvent {
     private int orderId;
 
-    private int clientId;
+    private String customerId;
 
-    private List<Integer> products;
+    private List<String> products;
 
     public int getOrderId() {
         return orderId;
@@ -17,19 +17,19 @@ public class OrderEvent {
         this.orderId = orderId;
     }
 
-    public int getClientId() {
-        return clientId;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
-    public List<Integer> getProducts() {
+    public List<String> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Integer> products) {
+    public void setProducts(List<String> products) {
         this.products = products;
     }
 }
