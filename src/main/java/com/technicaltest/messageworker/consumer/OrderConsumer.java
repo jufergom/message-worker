@@ -44,12 +44,12 @@ public class OrderConsumer {
         logger.info("Received event {}", event);
         OrderEvent orderEvent = objectMapper.readValue(event, OrderEvent.class);
 
-        RLock lock = orderLockService.getLock(orderEvent.getCustomerId());
+        RLock lock = orderLockService.getLock(orderEvent.getOrderId());
 
         boolean acquired = lock.tryLock(5, 30, TimeUnit.SECONDS);
 
         if (!acquired) {
-            logger.warn("Order locked for customer {}", orderEvent.getCustomerId());
+            logger.warn("Order locked for order {}", orderEvent.getOrderId());
             return;
         }
 

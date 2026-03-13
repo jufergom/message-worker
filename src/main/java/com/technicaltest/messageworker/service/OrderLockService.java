@@ -12,7 +12,7 @@ public class OrderLockService {
         this.redissonClient = redissonClient;
     }
 
-    public RLock getLock(String orderId) {
+    public RLock getLock(int orderId) {
         return redissonClient.getLock("order-lock:" + orderId);
     }
 }
