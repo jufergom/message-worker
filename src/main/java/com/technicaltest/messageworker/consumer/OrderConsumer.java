@@ -6,6 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.technicaltest.messageworker.event.OrderEvent;
+import com.technicaltest.messageworker.exception.InvalidOrderException;
 import com.technicaltest.messageworker.service.OrderService;
 
 import tools.jackson.databind.ObjectMapper;
@@ -30,7 +31,13 @@ public class OrderConsumer {
         OrderEvent orderEvent = objectMapper.readValue(event, OrderEvent.class);
         orderService.process(orderEvent)
             .doOnSuccess(order -> logger.info("Order saved: {}", order.getOrderId()))
-            .doOnError(error -> logger.error("Failed to process order", error))
+            .doOnError(error -> {
+                if (error instanceof InvalidOrderException) {
+                    logger.error("Invalid order: {}", error.getMessage());
+                } else {
+                    logger.error("Error processing order", error);
+                }
+            })
             .subscribe();
     }
 }
