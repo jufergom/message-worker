@@ -1,6 +1,7 @@
 package com.technicaltest.messageworker.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -20,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Cacheable(value = "customer_cache", key = "id")
     public Mono<CustomerDTO> getCustomerById(String id) {
         return this.webClient
             .get()
